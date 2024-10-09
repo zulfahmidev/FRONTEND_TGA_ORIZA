@@ -23,12 +23,12 @@ definePageMeta({
                         <div class="form-group">
                             <input type="text" class="form-control form-control-user"
                                 id="exampleInputUsername" aria-describedby="usernameHelp"
-                                placeholder="Enter Username..." v-model="payloads.username">
+                                placeholder="Enter Username..." v-model="payloads.username" @keydown.enter="login">
                             <div class="text-danger small" v-if="errors.username">{{ errors.username }}</div>
                         </div>
                         <div class="form-group">
                             <input type="password" class="form-control form-control-user"
-                                id="exampleInputPassword" placeholder="Password" v-model="payloads.password">
+                                id="exampleInputPassword" placeholder="Password" v-model="payloads.password" @keydown.enter="login">
                                 <div class="text-danger small" v-if="errors.password">{{ errors.password }}</div>
                         </div>
                         <hr>
@@ -67,12 +67,15 @@ export default {
                     method: 'POST',
                     body: JSON.stringify(this.payloads)
                 })
-                localStorage.setItem("AUTH_TOKEN", res.data.token)
-                this.$router.replace('/')
+                if (res) {
+                    console.log(res)
+                    localStorage.setItem("AUTH_TOKEN", res.data.token)
+                    this.$router.replace('/')
+                }
             } catch (error: any) {
-                const res = error.response._data
-                this.errorMessage = res.message
                 if (error.statusCode == 400) {
+                    const res = error.response._data
+                    this.errorMessage = res.message
                     this.errors = res.errors
                 }
             } finally {

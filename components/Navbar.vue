@@ -13,8 +13,8 @@
             <li class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="mr-2 d-none d-lg-inline text-gray-600 small text-capitalize">Zulfahmi</span>
-                    <img class="img-profile rounded-circle" src="">
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 text-capitalize">{{ user.username }}</span>
+                    <!-- <img class="img-profile rounded-circle" src=""> -->
                 </a>
                 <!-- Dropdown - User Information -->
                 <form action="" method="post">
@@ -35,6 +35,11 @@
 
 <script>
 export default {
+    props: {
+        user: {
+            type: Object
+        }
+    },
     methods: {
         logout() {
             localStorage.removeItem('AUTH_TOKEN')

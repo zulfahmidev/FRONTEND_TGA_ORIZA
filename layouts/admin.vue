@@ -15,7 +15,7 @@
               <div id="content">
   
                   <!-- Topbar -->
-                  <Navbar />
+                  <Navbar :user="userData" />
                   <!-- End of Topbar -->
   
                   <!-- Begin Page Content -->
@@ -51,8 +51,25 @@
     </div>
 </template>
 <script lang="ts">
+import fetchAPI from '~/libs/API';
+
 export default {
-    mounted() {
+    data() {
+        return {
+            userData: {}
+        }
+    },
+    async mounted() {
+        try {
+            const res:any = await fetchAPI('/auth/me')
+            this.userData = res.data
+            console.log(this.userData)
+        } catch (error:any) {
+            let status = [401, 422]
+            if (status.includes(error.status)) {
+                localStorage.removeItem('AUTH_TOKEN')
+            }
+        }
         const token = localStorage.getItem('AUTH_TOKEN')
         if (!token) {
             this.$router.replace('/login')
